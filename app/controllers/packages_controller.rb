@@ -1,14 +1,18 @@
 class PackagesController < ApplicationController
   def index
+    
     if @current_user == nil
       redirect_to("/user_sign_in")
    else 
     matching_packages = Package.all
-
     @list_of_packages = matching_packages.order({ :created_at => :desc })
+
+    @package_waiting= @list_of_packages.where({ :status => "waiting_on"})
+    @package_received= @list_of_packages.where({ :status => "received"})
 
     render({ :template => "packages/index.html.erb" })
    end 
+   
   end
 
   def show
@@ -26,8 +30,8 @@ class PackagesController < ApplicationController
     the_package.description = params.fetch("query_description")
     the_package.arrival_date = params.fetch("query_arrival_date")
     the_package.details = params.fetch("query_details")
-    the_package.user_id = params.fetch("query_user_id")
-    the_package.status = params.fetch("query_status")
+    the_package.user_id = @current_user.id
+    the_package.status = "waiting_on"
 
     if the_package.valid?
       the_package.save
@@ -38,14 +42,11 @@ class PackagesController < ApplicationController
   end
 
   def update
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("package_id")
     the_package = Package.where({ :id => the_id }).at(0)
 
-    the_package.description = params.fetch("query_description")
-    the_package.arrival_date = params.fetch("query_arrival_date")
-    the_package.details = params.fetch("query_details")
-    the_package.user_id = params.fetch("query_user_id")
-    the_package.status = params.fetch("query_status")
+    the_package.user_id = @current_user.id
+    the_package.status = "received"
 
     if the_package.valid?
       the_package.save

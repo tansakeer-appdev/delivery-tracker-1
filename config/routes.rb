@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
 
-
   # Routes for the Package resource:
 
   # CREATE
@@ -10,11 +9,11 @@ Rails.application.routes.draw do
   # READ
   get("/", { :controller => "packages", :action => "index" })
   
-  get("/packages/:path_id", { :controller => "packages", :action => "show" })
+  #get("/packages/:path_id", { :controller => "packages", :action => "show" })
   
   # UPDATE
   
-  post("/modify_package/:path_id", { :controller => "packages", :action => "update" })
+  post("/modify_package", { :controller => "packages", :action => "update" })
   
   # DELETE
   get("/delete_package/:path_id", { :controller => "packages", :action => "destroy" })

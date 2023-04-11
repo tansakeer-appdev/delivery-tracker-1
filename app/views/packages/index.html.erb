@@ -15,28 +15,19 @@
       Expecting a package?
     </h2>
 
-    <form action="/insert_delivery" method="post">
+    <form action="/insert_package" method="post">
       <div>
-        <label for="description_box">
-          Description
-        </label>
-
+        <label for="description_box">Description</label>
         <input type="text" id="description_box" name="query_description">
       </div>
 
       <div>
-        <label for="supposed_to_arrive_on_box">
-          Supposed to arrive on
-        </label>
-
-        <input type="date" id="supposed_to_arrive_on_box" name="query_supposed_to_arrive_on">
+        <label for="supposed_to_arrive_on_box">Supposed to arrive on</label>
+        <input id="supposed_to_arrive_on_box" type="date" name="query_arrival_date">
       </div>
 
       <div>
-        <label for="details_box">
-          Details
-        </label>
-
+        <label for="details_box">Details</label>
         <textarea id="details_box" name="query_details" rows="3"></textarea>
       </div>
 
@@ -49,12 +40,32 @@
 
 <hr>
 
+
 <div class="waiting_on">
   <h2>Waiting on</h2>
 
   <ul>
-  </ul>
-</div>
+      <% @package_waiting.each do|package_list| %>
+
+      <li>
+        <div><%= package_list.description%></div>
+
+        <div style="color: red">
+          Supposed to arrive on <%= package_list.arrival_date%>
+        </div>
+
+        <div> <%= package_list.details%></div>
+
+  
+          <form action="/modify_package" method="post">
+          <input type="hidden" name="package_id" value="<%= package_list.id %>">
+
+            <button>Mark as received</button>
+          </form>
+       
+      </li>
+      <% end %>
+  </ul> 
 
 <hr>
 
@@ -62,7 +73,19 @@
   <h2>Received</h2>
 
   <ul>
+    <% @package_received.each do|package_list| %>
+
+      <li>
+        <div><%= package_list.description %></div>
+
+        <div>
+          <small>
+            Updated <%= time_ago_in_words(package_list.created_at) %> ago
+
+            <a href="/delete_delivery/186010">Delete</a>
+          </small>
+        </div>
+      </li>
+    <% end%>
   </ul>
 </div>
-
-<% end %>

@@ -12,6 +12,9 @@
 #  user_id      :integer
 #
 class Package < ApplicationRecord
+  validates :description, :presence => true
+  validates :arrival_date, :presence => true
+
 
   belongs_to :package_owner, :class_name => "User", :foreign_key => "user_id"
 end
