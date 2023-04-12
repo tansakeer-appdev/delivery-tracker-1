@@ -17,4 +17,8 @@ class Package < ApplicationRecord
 
 
   belongs_to :package_owner, :class_name => "User", :foreign_key => "user_id"
+
+  def timing
+    diff = (Date.parse(Time.now.to_s) - Date.parse(self.arrival_date.to_s)).to_i
+  end
 end

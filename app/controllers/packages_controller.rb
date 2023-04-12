@@ -19,7 +19,6 @@ class PackagesController < ApplicationController
     the_id = params.fetch("path_id")
 
     matching_packages = Package.where({ :id => the_id })
-
     @the_package = matching_packages.at(0)
 
     render({ :template => "packages/show.html.erb" })
@@ -35,7 +34,7 @@ class PackagesController < ApplicationController
 
     if the_package.valid?
       the_package.save
-      redirect_to("/", { :notice => "Package created successfully." })
+      redirect_to("/", { :notice => "Added to list" })
     else
       redirect_to("/", { :alert => the_package.errors.full_messages.to_sentence })
     end
@@ -43,25 +42,23 @@ class PackagesController < ApplicationController
 
   def update
     the_id = params.fetch("package_id")
-    the_package = Package.where({ :id => the_id }).at(0)
-
-    the_package.user_id = @current_user.id
-    the_package.status = "received"
-
+    the_package = Package.where({ :user_id => @current_user.id }).where({ :id => the_id }).at(0)
+      the_package.status = "received"
+     
     if the_package.valid?
       the_package.save
-      redirect_to("/", { :notice => "Package updated successfully."} )
+      redirect_to("/", { :notice => "Marked as received"} )
     else
       redirect_to("/", { :alert => the_package.errors.full_messages.to_sentence })
     end
   end
 
   def destroy
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("pack_id")
     the_package = Package.where({ :id => the_id }).at(0)
 
     the_package.destroy
 
-    redirect_to("/", { :notice => "Package deleted successfully."} )
+    redirect_to("/", { :notice => "Deleted."} )
   end
 end

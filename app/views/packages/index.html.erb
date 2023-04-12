@@ -41,22 +41,27 @@
 <hr>
 
 
-<div class="waiting_on">
+<div class="waiting_on" style="background-color: lightgoldenrodyellow">
   <h2>Waiting on</h2>
 
   <ul>
-      <% @package_waiting.each do|package_list| %>
+      <% @package_waiting.each do |package_list| %>
 
       <li>
         <div><%= package_list.description%></div>
-
-        <div style="color: red">
-          Supposed to arrive on <%= package_list.arrival_date%>
+        
+         <% if package_list.timing <=2 %>
+        <div style="color: black">
+          Supposed to arrive on <%= package_list.arrival_date.to_s %>
         </div>
+        <% else %>
+        <div style="color: red">
+          Supposed to arrive on <%= package_list.arrival_date.to_s %>
+        </div>
+        <% end %>
 
-        <div> <%= package_list.details%></div>
+          <div> <%= package_list.details%></div>
 
-  
           <form action="/modify_package" method="post">
           <input type="hidden" name="package_id" value="<%= package_list.id %>">
 
@@ -66,10 +71,11 @@
       </li>
       <% end %>
   </ul> 
+</div>
 
 <hr>
 
-<div class="received">
+<div class="received" style="background-color: lightgreen">
   <h2>Received</h2>
 
   <ul>
@@ -80,9 +86,9 @@
 
         <div>
           <small>
-            Updated <%= time_ago_in_words(package_list.created_at) %> ago
+            Updated <%= time_ago_in_words(package_list.updated_at) %> ago
 
-            <a href="/delete_delivery/186010">Delete</a>
+            <a href="/delete_package/<%= package_list.id%>">Delete</a>
           </small>
         </div>
       </li>
